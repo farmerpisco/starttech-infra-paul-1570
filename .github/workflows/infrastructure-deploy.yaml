@@ -98,6 +98,31 @@ jobs:
         id: init
         run: terraform init -backend-config="bucket=$S3_BUCKET"
 
+      - name: Remove backend resources from state
+        run: |
+          echo "Removing backend resources from Terraform state..."
+          terraform state rm aws_s3_bucket.terraform_state || true
+          terraform state rm aws_s3_bucket_versioning.terraform_state || true
+          terraform state rm aws_s3_bucket_public_access_block.terraform_state || true
+          terraform state rm aws_s3_bucket_server_side_encryption_configuration.terraform_state || true
+          terraform state rm aws_dynamodb_table.terraform_locks || true
+          echo "Backend resources removed from state"
+
       - name: Terraform destroy
         id: destroy
         run: terraform destroy -auto-approve -input=false
+
+      - name: Clean up S3 backend manually
+        if: always()  # Run even if previous step fails
+        run: |
+          echo "Cleaning up S3 bucket..."
+          aws s3 rm s3://${{ secrets.S3_BUCKET }} --recursive || true
+          aws s3 rb s3://${{ secrets.S3_BUCKET }} --force || true
+          echo "S3 bucket cleaned up"
+          
+      - name: Clean up DynamoDB table
+        if: always()
+        run: |
+          echo "Deleting DynamoDB lock table..."
+          aws dynamodb delete-table --table-name starttech-terraform-locks || true
+          echo "DynamoDB table deleted"
