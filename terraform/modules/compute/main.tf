@@ -16,7 +16,7 @@ data "aws_ami" "ubuntu" {
 
 
 resource "aws_launch_template" "st_lt" {
-  name_prefix            = "${var.project_name}"
+  name_prefix            = var.project_name
   image_id               = data.aws_ami.ubuntu.id
   instance_type          = var.instance_type
   vpc_security_group_ids = [var.st_sg_id]
@@ -25,7 +25,7 @@ resource "aws_launch_template" "st_lt" {
   iam_instance_profile {
     name = var.iam_instance_profile_name
   }
-  
+
   user_data = base64encode(<<-EOF
     #!/bin/bash
     # set -e
@@ -59,9 +59,9 @@ resource "aws_autoscaling_group" "st_asg" {
 
   vpc_zone_identifier = var.private_subnets_ids
 
-  desired_capacity   = 2
-  max_size           = 4
-  min_size           = 2
+  desired_capacity = 2
+  max_size         = 4
+  min_size         = 2
 
   target_group_arns = [aws_lb_target_group.lb_tg.arn]
   health_check_type = "ELB"
@@ -71,9 +71,9 @@ resource "aws_autoscaling_group" "st_asg" {
     version = "$Latest"
   }
 
-  tag {  
-    key                 = "Name"   
-    value               = "${var.project_name}-ASG"    
+  tag {
+    key                 = "Name"
+    value               = "${var.project_name}-ASG"
     propagate_at_launch = true
   }
 }
@@ -113,18 +113,18 @@ resource "aws_lb_listener" "lb_http" {
   }
 }
 
-resource "aws_lb_listener_rule" "asg" {  
-  listener_arn = aws_lb_listener.lb_http.arn  
-  priority     = 100  
-  
-  condition {    
-    path_pattern {      
-      values = ["/*"]    
-    }  
-  }  
-  
-  action {    
-    type             = "forward"    
-    target_group_arn = aws_lb_target_group.lb_tg.arn  
+resource "aws_lb_listener_rule" "asg" {
+  listener_arn = aws_lb_listener.lb_http.arn
+  priority     = 100
+
+  condition {
+    path_pattern {
+      values = ["/*"]
+    }
+  }
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.lb_tg.arn
   }
 }

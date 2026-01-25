@@ -8,7 +8,7 @@ resource "aws_s3_bucket" "st_s3" {
 }
 
 resource "aws_s3_bucket_public_access_block" "public_access" {
-  bucket= aws_s3_bucket.st_s3.id
+  bucket                  = aws_s3_bucket.st_s3.id
   block_public_acls       = true
   block_public_policy     = true
   ignore_public_acls      = true
@@ -77,7 +77,7 @@ resource "aws_cloudfront_distribution" "st_frontend_cdn" {
   restrictions {
     geo_restriction {
       restriction_type = "none"
-    }  
+    }
   }
 
   viewer_certificate {
@@ -106,15 +106,15 @@ resource "aws_elasticache_subnet_group" "redis_subnet_group" {
 
 
 resource "aws_elasticache_cluster" "redis" {
-  cluster_id           = "st-redis"
-  engine               = "redis"
-  engine_version       = "7.0"
-  node_type            = "cache.t3.micro"
-  num_cache_nodes      = 1
-  port                 = 6379
+  cluster_id      = "st-redis"
+  engine          = "redis"
+  engine_version  = "7.0"
+  node_type       = "cache.t3.micro"
+  num_cache_nodes = 1
+  port            = 6379
 
-  subnet_group_name    = aws_elasticache_subnet_group.redis_subnet_group.name
-  security_group_ids   = [var.redis_sg_id]
+  subnet_group_name  = aws_elasticache_subnet_group.redis_subnet_group.name
+  security_group_ids = [var.redis_sg_id]
 
   parameter_group_name = "default.redis7"
 

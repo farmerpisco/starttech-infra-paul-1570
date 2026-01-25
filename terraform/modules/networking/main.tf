@@ -96,7 +96,7 @@ resource "aws_route_table" "st_private_rt" {
 }
 
 resource "aws_route_table_association" "private_rta" {
-  count = length(aws_subnet.st_private_subnets)
+  count          = length(aws_subnet.st_private_subnets)
   subnet_id      = aws_subnet.st_private_subnets[count.index].id
   route_table_id = aws_route_table.st_private_rt.id
 }
@@ -110,11 +110,11 @@ resource "aws_security_group" "st_sg" {
   }
 
   ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
+    from_port       = 80
+    to_port         = 80
+    protocol        = "tcp"
     security_groups = [aws_security_group.st_alb_sg.id]
-    description = "Allow HTTP from Load Balabcer"
+    description     = "Allow HTTP from Load Balabcer"
   }
 
   egress {
@@ -155,7 +155,7 @@ resource "aws_security_group" "st_alb_sg" {
   }
 
   tags = {
-    Name        = "${var.project_name}-alb-SG"
+    Name = "${var.project_name}-alb-SG"
   }
 }
 
