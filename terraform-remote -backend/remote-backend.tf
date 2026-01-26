@@ -1,12 +1,24 @@
 # This is to properly keep and make the state file accessible because...
 # ...github actions runs jobs on github hosted runners.
+
+terraform {
+  required_version = ">= 1.0"
+
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "6.28.0"
+    }
+  }
+}
+
 resource "aws_s3_bucket" "st_terraform_state" {
   bucket = "${var.project_name}-state-bucket"
 
   # Prevent accidental deletion of this S3 bucket
   # Comment-out when you want to destroy resources
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy      = true
   }
 }
 
