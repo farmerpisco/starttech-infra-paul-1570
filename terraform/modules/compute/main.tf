@@ -104,7 +104,7 @@ resource "aws_lb_target_group" "lb_tg" {
   vpc_id   = var.vpc_id
 
   health_check {
-    path                = "/health"
+    path                = "/"
     protocol            = "HTTP"
     matcher             = "200"
     timeout             = 3
