@@ -28,7 +28,7 @@ resource "aws_launch_template" "st_lt" {
 
   user_data = base64encode(<<-EOF
     #!/bin/bash
-    # set -e
+    set -e
 
     # Update system
     apt-get update -y
