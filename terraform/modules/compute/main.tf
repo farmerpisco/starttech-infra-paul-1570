@@ -35,7 +35,6 @@ resource "aws_launch_template" "st_lt" {
 
     # Install Nginx
     apt-get install -y nginx
-    echo "<h1>Hello from $(hostname)</h1><p>IP: $(hostname -I)</p>" > /var/www/html/index.html
     systemctl start nginx
     systemctl enable nginx
 
