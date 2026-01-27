@@ -44,6 +44,18 @@ resource "aws_launch_template" "st_lt" {
     systemctl start docker
     systemctl enable docker
 
+    # Create docker network
+    docker network create muchtodo-app
+
+    # Start mongodb container
+    docker run -d \
+    --name mongodb \
+    --network muchtodo-app \
+    -e MONGO_INITDB_ROOT_USERNAME=goappuser \
+    -e MONGO_INITDB_ROOT_PASSWORD=goapppass \
+    -p 27017:27017 \
+    mongo
+
     # Install CloudWatch Agent
     # apt-get install -y amazon-cloudwatch-agent
 
