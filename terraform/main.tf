@@ -40,6 +40,9 @@ module "compute" {
   iam_instance_profile_name = module.monitoring.st_ec2_profile_name
   private_subnets_ids       = module.networking.st_private_subnets_ids
   public_subnets_ids        = module.networking.st_public_subnets_ids
+  docker_image              = var.docker_image
+  mongo_username            = var.mongo_username
+  mongo_password            = var.mongo_password
 }
 
 module "storage" {
