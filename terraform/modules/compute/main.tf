@@ -49,7 +49,7 @@ resource "aws_launch_template" "st_lt" {
     docker network inspect starttech-app >/dev/null 2>&1 || \
     docker network create starttech-app
 
-    # Start mongodb container
+    ## Start mongodb container
     docker run -d \
     --name mongodb \
     --network muchtodo-app \

@@ -45,4 +45,3 @@ variable "mongo_password" {
   default     = "goapppass"
 }
 
-#
