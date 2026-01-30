@@ -44,9 +44,3 @@ variable "mongo_password" {
   type        = string
   default     = "goapppass"
 }
-
-variable "aws_region" {
-  description = "AWS region for all resources"
-  type        = string
-  default     = "eu-west-2"
-}
