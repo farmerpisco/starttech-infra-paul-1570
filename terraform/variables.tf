@@ -26,3 +26,21 @@ variable "instance_type" {
   type        = string
   default     = "t3.micro"
 }
+
+variable "docker_image" {
+  description = "Docker image name for the application"
+  type = string
+  default = "thefemipaul/starttech-app:latest"
+}
+
+variable "mongo_username" {
+  description = "MongoDB root username"
+  type        = string
+  default     = "goappuser"
+}
+
+variable "mongo_password" {
+  description = "MongoDB root password"
+  type        = string
+  default     = "goapppass"
+}

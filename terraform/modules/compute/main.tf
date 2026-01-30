@@ -30,6 +30,8 @@ resource "aws_launch_template" "st_lt" {
     #!/bin/bash
     set -e
 
+    INSTANCE_ID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
+
     # Update system
     apt-get update -y
 
@@ -44,22 +46,40 @@ resource "aws_launch_template" "st_lt" {
     systemctl enable docker
 
     # Create docker network
-    docker network create muchtodo-app
+    docker network inspect starttech-app >/dev/null 2>&1 || \
+    docker network create starttech-app
 
     # Start mongodb container
     docker run -d \
     --name mongodb \
     --network muchtodo-app \
-    -e MONGO_INITDB_ROOT_USERNAME=goappuser \
-    -e MONGO_INITDB_ROOT_PASSWORD=goapppass \
+    -e MONGO_INITDB_ROOT_USERNAME=${var.mongo_username} \
+    -e MONGO_INITDB_ROOT_PASSWORD=${var.mongo_password} \
     -p 27017:27017 \
     mongo
 
+    # Start application container. This is to ensure new instaces started
+    # by the autoscaling group have the application running automatically.
+    docker run -d \
+    --name starttech-app \
+    --network muchtodo-app \
+    --restart unless-stopped \
+    -p 8080:8080 \
+    -e MONGO_URI=mongodb://${var.mongo_username}:${var.mongo_password}@mongodb:27017 \
+    -e DB_NAME=${var.project_name} \
+    --log-driver awslogs \
+    --log-opt awslogs-region=${var.aws_region} \
+    --log-opt awslogs-group=/${var.project_name}/backend \
+    --log-opt awslogs-stream=$INSTANCE_ID/${var.project_name} \
+    --log-opt awslogs-create-group=false \
+    ${var.docker_image}:latest
+
     # Install CloudWatch Agent
-    # apt-get install -y amazon-cloudwatch-agent
+    apt-get install -y amazon-cloudwatch-agent
 
     # Start agent later with config
-    # systemctl enable amazon-cloudwatch-agent
+    systemctl enable amazon-cloudwatch-agent
+    systemctl enable amazon-cloudwatch-agent
   EOF
   )
 

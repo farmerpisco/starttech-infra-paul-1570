@@ -1,3 +1,6 @@
+# ======================
+# S3 Bucket resources
+# ======================
 resource "aws_s3_bucket" "st_s3" {
   bucket = "${var.project_name}-frontend-bucket-dev"
 
@@ -102,8 +105,6 @@ resource "aws_elasticache_subnet_group" "redis_subnet_group" {
     Name = "${var.project_name}-Redis-Subnet-Group"
   }
 }
-
-
 
 resource "aws_elasticache_cluster" "redis" {
   cluster_id      = "st-redis"
