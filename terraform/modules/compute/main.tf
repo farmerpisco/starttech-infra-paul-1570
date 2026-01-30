@@ -46,13 +46,13 @@ resource "aws_launch_template" "st_lt" {
     systemctl enable docker
 
     # Create docker network
-    docker network inspect starttech-app >/dev/null 2>&1 || \
+    docker network inspect starttech-app >/dev/null 2>&1 || true
     docker network create starttech-app
 
     ## Start mongodb container
     docker run -d \
     --name mongodb \
-    --network muchtodo-app \
+    --network starttech-app \
     -e MONGO_INITDB_ROOT_USERNAME=${var.mongo_username} \
     -e MONGO_INITDB_ROOT_PASSWORD=${var.mongo_password} \
     -p 27017:27017 \
