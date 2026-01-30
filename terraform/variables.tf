@@ -30,7 +30,7 @@ variable "instance_type" {
 variable "docker_image" {
   description = "Docker image name for the application"
   type = string
-  default = "thefemipaul/starttech-app:latest"
+  default = "thefemipaul/starttech-app"
 }
 
 variable "mongo_username" {

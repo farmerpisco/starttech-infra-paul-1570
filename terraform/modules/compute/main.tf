@@ -55,7 +55,8 @@ resource "aws_launch_template" "st_lt" {
     --network starttech-app \
     -e MONGO_INITDB_ROOT_USERNAME=${var.mongo_username} \
     -e MONGO_INITDB_ROOT_PASSWORD=${var.mongo_password} \
-    -p 27017:27017 \
+    --restart unless-stopped \
+    -v mongodb-data:/data/db \
     mongo
 
     # Start application container. This is to ensure new instaces started
