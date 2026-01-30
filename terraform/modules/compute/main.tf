@@ -62,7 +62,7 @@ resource "aws_launch_template" "st_lt" {
     # by the autoscaling group have the application running automatically.
     docker run -d \
     --name starttech-app \
-    --network muchtodo-app \
+    --network starttech-app \
     --restart unless-stopped \
     -p 8080:8080 \
     -e MONGO_URI=mongodb://${var.mongo_username}:${var.mongo_password}@mongodb:27017 \
@@ -73,6 +73,12 @@ resource "aws_launch_template" "st_lt" {
     --log-opt awslogs-stream=$INSTANCE_ID/${var.project_name} \
     --log-opt awslogs-create-group=false \
     ${var.docker_image}:latest
+
+    # Configure NGINX
+    sudo rm -f /etc/nginx/sites-enabled/default
+    echo \"server { listen 80; location / { proxy_pass http://127.0.0.1:8080; } }\" | sudo tee /etc/nginx/sites-available/backend
+    sudo ln -sf /etc/nginx/sites-available/backend /etc/nginx/sites-enabled/backend
+    sudo systemctl reload nginx
 
     # Install CloudWatch Agent
     apt-get install -y amazon-cloudwatch-agent
