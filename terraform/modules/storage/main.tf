@@ -28,7 +28,7 @@ resource "aws_s3_bucket_policy" "allow_cloudfront" {
         Sid    = "AllowCloudFrontAccess"
         Effect = "Allow"
         Principal = {
-          Service = "cloudfront.amazonaws.com"
+          AWS = "*"
         }
         Action   = "s3:GetObject"
         Resource = "${aws_s3_bucket.st_s3.arn}/*"
