@@ -1,5 +1,7 @@
 # This is to properly keep and make the state file accessible because...
 # ...github actions runs jobs on github hosted runners.
+# This is the best way i can think of to manage remote state for this project.
+# I do not mean to not follow the required repository strucutre.
 
 terraform {
   required_version = ">= 1.0"
@@ -17,9 +19,9 @@ resource "aws_s3_bucket" "st_terraform_state" {
 
   # Prevent accidental deletion of this S3 bucket
   # Comment-out when you want to destroy resources
-  # lifecycle {
-  #   prevent_destroy      = true
-  # }
+  lifecycle {
+    prevent_destroy      = true
+  }
 }
 
 # Enable versioning so I can see the full revision history of the state files
