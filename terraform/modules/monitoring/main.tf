@@ -1,10 +1,10 @@
 resource "aws_cloudwatch_log_group" "st_cw_lg" {
-  name              = "${var.project_name}-Log-Group"
-  retention_in_days = 30
+  name              = "/${var.project_name}/backend"
+  retention_in_days = 14
 
   tags = {
     Environment = "dev"
-    Application = "serviceA"
+    Application = var.project_name
   }
 }
 
@@ -46,11 +46,10 @@ resource "aws_iam_policy" "st_ec2_policy" {
       {
         Effect = "Allow"
         Action = [
-          "logs:CreateLogGroup",
           "logs:CreateLogStream",
           "logs:PutLogEvents"
         ]
-        Resource = "arn:aws:logs:*:*:log-group:/aws/ec2/*"
+        Resource = "${aws_cloudwatch_log_group.st_cw_lg.arn}:*"
       }
     ]
   })

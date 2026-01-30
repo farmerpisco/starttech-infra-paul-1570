@@ -82,10 +82,33 @@ resource "aws_autoscaling_group" "st_asg" {
     version = "$Latest"
   }
 
+  instance_refresh {
+    strategy = "Rolling"
+
+    preferences {
+      min_healthy_percentage = 50
+      instance_warmup        = 120
+    }
+  }
+
   tag {
     key                 = "Name"
     value               = "${var.project_name}-ASG"
     propagate_at_launch = true
+  }
+}
+
+resource "aws_autoscaling_policy" "cpu_target_tracking" {
+  name                   = "${var.project_name}-cpu-scaling"
+  autoscaling_group_name = aws_autoscaling_group.st_asg.name
+  policy_type            = "TargetTrackingScaling"
+
+  target_tracking_configuration {
+    predefined_metric_specification {
+      predefined_metric_type = "ASGAverageCPUUtilization"
+    }
+
+    target_value = 75
   }
 }
 
@@ -140,3 +163,5 @@ resource "aws_lb_listener_rule" "asg" {
     target_group_arn = aws_lb_target_group.lb_tg.arn
   }
 }
+
+
