@@ -1,0 +1,38 @@
+[
+  {
+    "name": "high-cpu-alarm",
+    "metric_name": "CPUUtilization",
+    "namespace": "AWS/EC2",
+    "statistic": "Average",
+    "period": 300,
+    "evaluation_periods": 2,
+    "threshold": 70,
+    "comparison_operator": "GreaterThanThreshold",
+    "alarm_actions": [],
+    "ok_actions": []
+  },
+  {
+    "name": "high-network-in-alarm",
+    "metric_name": "NetworkIn",
+    "namespace": "AWS/EC2",
+    "statistic": "Average",
+    "period": 300,
+    "evaluation_periods": 2,
+    "threshold": 50000000,
+    "comparison_operator": "GreaterThanThreshold",
+    "alarm_actions": [],
+    "ok_actions": []
+  },
+  {
+    "name": "high-network-out-alarm",
+    "metric_name": "NetworkOut",
+    "namespace": "AWS/EC2",
+    "statistic": "Average",
+    "period": 300,
+    "evaluation_periods": 2,
+    "threshold": 50000000,
+    "comparison_operator": "GreaterThanThreshold",
+    "alarm_actions": [],
+    "ok_actions": []
+  }
+]

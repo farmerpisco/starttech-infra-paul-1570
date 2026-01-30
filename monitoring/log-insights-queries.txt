@@ -1,0 +1,16 @@
+# Query 1: Backend Error Logs
+fields @timestamp, @message
+| filter @message like /ERROR/
+| sort @timestamp desc
+| limit 50
+
+# Query 2: High Latency Requests
+fields @timestamp, latency, @message
+| sort latency desc
+| limit 50
+
+# Query 3: MongoDB Connection Issues
+fields @timestamp, @message
+| filter @message like /MongoDB|connection/i
+| sort @timestamp desc
+| limit 50
