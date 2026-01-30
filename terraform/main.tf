@@ -43,6 +43,7 @@ module "compute" {
   docker_image              = var.docker_image
   mongo_username            = var.mongo_username
   mongo_password            = var.mongo_password
+  aws_region                = var.aws_region
 }
 
 module "storage" {
