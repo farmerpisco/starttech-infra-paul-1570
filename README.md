@@ -251,8 +251,3 @@ AltSchool Africa – Cloud Engineering Track
 Semester 3 Assessment – Terraform Infrastructure Deployment
 
 ---
-
-## Notes
-
-* MongoDB is deployed inside EC2 instances for **assessment/demo purposes only**
-* For production use, a managed database service is recommended
